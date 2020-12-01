@@ -1,2 +1,26 @@
 ---
 # tasks for tivoli backup client
+#
+
+
+- name: create rpm temp dir
+  file:
+    path: '{{ rpmdir }}'
+    state: directory
+    mode: '0755'
+  tags:
+  - tivoliba
+
+- name: copy rpms tivoli backup client
+  synchronize:
+    src: ../files/rpms/*.rpm
+    dest: '{{ rpmdir }}'
+  tags:
+  - tivoliba
+
+- name: install tivoli rpms
+  shell: yum localinstall *.rpm -y
+  args:
+    chdir: '{{ rpmdir }}'
+  tags:
+  - tivoliba
