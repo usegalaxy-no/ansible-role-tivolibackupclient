@@ -33,7 +33,7 @@
   tags:
   - tivoliba
 
-- name: create adsm configdir 
+- name: create adsm configdir
   file:
     path: '{{ adsm_cfgdir }}'
     state: directory
