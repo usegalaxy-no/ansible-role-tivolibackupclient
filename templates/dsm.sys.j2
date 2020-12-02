@@ -1,0 +1,17 @@
+DEFaultserver    sym6-etc
+
+SErvername  sym6-etc
+   NODENAME           {{ backupclient_name }}
+   COMMmethod         TCPip
+   TCPPort            1500
+   TCPServeraddress   {{ backupserver_ip }}
+   Schedlogname       {{ tivoli_logdir }}/dsmsched.log-etc
+   Schedlogret        14,D
+   Errorlogname       {{ tivoli_logdir }}/{{ tivoli_errorlog }}
+   Errorlogret        14,D
+   TXNBytelimit       2097152 
+   Passwordaccess     generate
+   Inclexcl           /opt/tivoli/tsm/client/ba/bin/dsm.inclexcl-etc
+   Domain             /etc
+   Managedservices    schedule webclient
+   VirtualMountPoint  /etc

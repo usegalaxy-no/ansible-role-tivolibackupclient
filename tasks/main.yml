@@ -24,3 +24,63 @@
     chdir: '{{ rpmdir }}'
   tags:
   - tivoliba
+
+- name: create tivoli logdir
+  file:
+    path: '{{ tivoli_logdir }}'
+    state: directory
+    mode: '0755'
+  tags:
+  - tivoliba
+
+
+- name: copy tivoli config
+  template:
+    src: dsm.sys.j2
+    dest: '{{ tivoli_cfgdir }}/dsm.sys'
+    mode: 0644
+    owner: root
+    group: root
+    force: yes
+  notify: restart dsmcad
+  tags:
+  - tivoliba
+
+- name: copy tivoli include exclude files
+  copy:
+    src: '{{ item }}'
+    dest: '{{ tivoli_cfgdir }}/{{ item }}'
+    mode: 0644
+    owner: root
+    group: root
+    force: yes
+  with_items:
+    - dsm.inclexcl-etc
+  notify: restart dsmcad
+  tags:
+  - tivoliba
+
+
+
+- name: copy systemd file
+  template:
+    src: dsmcad.service.j2
+    dest: /etc/systemd/system/dsmcad.service
+    mode: 0755
+    owner: root
+    group: root
+  tags:
+  - tivoliba
+
+- name: add to systemctl
+  command: /usr/bin/systemctl daemon-reload
+  tags:
+  - tivoliba
+
+- name: start and enable dsmcad
+  service:
+    name: dsmcad
+    state: started
+    enabled: true
+  tags:
+  - tivoliba

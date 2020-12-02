@@ -2,3 +2,8 @@
 # defaults for tivoli backup client
 
 rpmdir: '/var/tmp/tivoliba/'
+backupclient_name: "{% if ansible_nodename == 'db.usegalaxy.no' %}DBUSEGALAXYNO{% else %}XXXTESTNODE{% endif %}"
+backupserver_ip: 129.177.30.195
+tivoli_cfgdir: /opt/tivoli/tsm/client/ba/bin
+tivoli_logdir: /var/log/tivoli
+tivoli_errorlog: tivoli-error.log
