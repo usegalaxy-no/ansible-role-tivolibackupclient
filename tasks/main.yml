@@ -18,10 +18,22 @@
   tags:
   - tivoliba
 
+- name: Find tivoli RPM files
+  find:
+    paths: '{{ rpmdir }}'
+    patterns: "*.rpm"
+  register: rpm_result
+  tags:
+  - tivoliba
+
 - name: install tivoli rpms
-  shell: yum localinstall *.rpm -y
-  args:
-    chdir: '{{ rpmdir }}'
+  yum:
+    name: "{{ item.path }}"
+    state: present
+  with_items: "{{ rpm_result.files }}"
+  retries: 5
+  register: result
+  until: result.rc == 0
   tags:
   - tivoliba
 
