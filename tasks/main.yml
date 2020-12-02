@@ -28,7 +28,7 @@
 - name: copy tivoli config
   template:
     src: dsm.sys.j2
-    dest: /opt/tivoli/tsm/client/ba/bin/dsm.sys
+    dest: {{ tivoli_cfgdir }}/dsm.sys
     mode: 0644
     owner: root
     group: root
@@ -36,6 +36,22 @@
   notify: restart dsmcad
   tags:
   - tivoliba
+
+- name: copy tivoli include exclude files
+  copy:
+    src: {{ item }}
+    dest: {{ tivoli_cfgdir }}/{{ item }}
+    mode: 0644
+    owner: root
+    group: root
+    force: yes
+  with_items:
+    - dsm.inclexcl-etc
+  notify: restart dsmcad
+  tags:
+  - tivoliba
+
+
 
 - name: copy systemd file
   template:
