@@ -37,7 +37,7 @@
 - name: copy tivoli config
   template:
     src: dsm.sys.j2
-    dest: {{ tivoli_cfgdir }}/dsm.sys
+    dest: '{{ tivoli_cfgdir }}/dsm.sys'
     mode: 0644
     owner: root
     group: root
@@ -48,8 +48,8 @@
 
 - name: copy tivoli include exclude files
   copy:
-    src: {{ item }}
-    dest: {{ tivoli_cfgdir }}/{{ item }}
+    src: '{{ item }}'
+    dest: '{{ tivoli_cfgdir }}/{{ item }}'
     mode: 0644
     owner: root
     group: root

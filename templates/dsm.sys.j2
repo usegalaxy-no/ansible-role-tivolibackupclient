@@ -7,7 +7,7 @@ SErvername  sym6-etc
    TCPServeraddress   {{ backupserver_ip }}
    Schedlogname       {{ tivoli_logdir }}/dsmsched.log-etc
    Schedlogret        14,D
-   Errorlogname       {{ tivoli_errorlog }}
+   Errorlogname       {{ tivoli_logdir }}/{{ tivoli_errorlog }}
    Errorlogret        14,D
    TXNBytelimit       2097152 
    Passwordaccess     generate
