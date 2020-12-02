@@ -33,6 +33,15 @@
   tags:
   - tivoliba
 
+- name: create adsm configdir 
+  file:
+    path: '{{ adsm_cfgdir }}'
+    state: directory
+    mode: '0755'
+  tags:
+  - tivoliba
+
+
 
 - name: copy tivoli config
   template:
@@ -56,11 +65,21 @@
     force: yes
   with_items:
     - dsm.inclexcl-etc
+    - dsm.opt-etc
   notify: restart dsmcad
   tags:
   - tivoliba
 
-
+- name: link tivoli cfg files
+  file:
+    src: '{{ tivoli_cfgdir }}/{{ item }}'
+    dest: '{{ adsm_cfgdir }}/{{ item }}'
+    state: link
+  with_items:
+    - dsm.inclexcl-etc
+    - dsm.opt-etc
+  tags:
+  - tivoliba
 
 - name: copy systemd file
   template:

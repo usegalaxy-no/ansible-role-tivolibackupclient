@@ -9,7 +9,10 @@ SErvername  sym6-etc
    Schedlogret        14,D
    Errorlogname       {{ tivoli_logdir }}/{{ tivoli_errorlog }}
    Errorlogret        14,D
-   TXNBytelimit       2097152 
+   TXNBytelimit       524288
+   TCPNodelay              Yes
+   TCPBuffsize             48
+   LARGECOMmbuffers        Yes
    Passwordaccess     generate
    Inclexcl           /opt/tivoli/tsm/client/ba/bin/dsm.inclexcl-etc
    Domain             /etc
