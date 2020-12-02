@@ -7,3 +7,4 @@ backupserver_ip: 129.177.30.195
 tivoli_cfgdir: /opt/tivoli/tsm/client/ba/bin
 tivoli_logdir: /var/log/tivoli
 tivoli_errorlog: tivoli-error.log
+adsm_cfgdir: /etc/adsm/
