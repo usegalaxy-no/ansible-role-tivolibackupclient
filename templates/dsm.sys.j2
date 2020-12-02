@@ -1,0 +1,30 @@
+DEFaultserver    sym6
+
+SErvername  sym6
+   NODENAME           {{ backupclient_name }}
+   COMMmethod         TCPip
+   TCPPort            1500
+   TCPServeraddress   {{ backupserver_ip }}
+   Schedlogname            /opt/tivoli/tsm/client/ba/bin/dsmsched.log
+   Schedlogret             14,D
+   Errorlogname            /opt/tivoli/tsm/client/ba/bin/dsmerror.log
+   Errorlogret             14,D
+   TXNBytelimit            524288
+   Passwordaccess          generate
+   Inclexcl                /opt/tivoli/tsm/client/ba/bin/dsm.inclexcl
+   Domain                  /etc
+   TCPNodelay              Yes
+   TCPBuffsize             48
+   * TCPWindowsize not supported in Linux
+   TCPWindowsize           128
+   LARGECOMmbuffers        Yes
+   * COMPression             No
+   * O COMPRESSAlways          Yes
+   * COMMRESTARTDURATION     60
+   * COMMRESTARTINTERVAL     60
+   * O MEMORYEFFICIENTBACKUP   No
+   * Sett opp p<E5> de store serverne til 5 eller 10
+   * RESOURceutilization       1
+   * O TAPEPrompt              No
+   Managedservices           schedule webclient
+   VirtualMountPoint       /etc

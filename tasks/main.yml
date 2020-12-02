@@ -24,3 +24,38 @@
     chdir: '{{ rpmdir }}'
   tags:
   - tivoliba
+
+- name: copy tivoli config
+  template:
+    src: dsm.sys.j2
+    dest: /opt/tivoli/tsm/client/ba/bin/dsm.sys
+    mode: 0644
+    owner: root
+    group: root
+    force: yes
+  notify: restart dsmcad
+  tags:
+  - tivoliba
+
+- name: copy systemd file
+  template:
+    src: dsmcad.service.j2
+    dest: /etc/systemd/system/dsmcad.service
+    mode: 0755
+    owner: root
+    group: root
+  tags:
+  - tivoliba
+
+- name: add to systemctl
+  command: /usr/bin/systemctl daemon-reload
+  tags:
+  - tivoliba
+
+- name: start and enable dsmcad
+  service:
+    name: dsmcad
+    state: started
+    enabled: true
+  tags:
+  - tivoliba
