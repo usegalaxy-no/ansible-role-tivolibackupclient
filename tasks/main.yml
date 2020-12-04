@@ -28,7 +28,7 @@
   - tivoliba
 
 - name: install tivoli rpms
-  command: rpm -i --force --nosignature  "{{ item.path }}"
+  command: rpm -i --force --nodeps --nosignature  "{{ item.path }}"
   with_items: "{{ rpm_result.files }}"
   tags:
   - tivoliba
@@ -65,27 +65,13 @@
 - name: copy tivoli include exclude files
   template:
     src: '{{ item }}-TEMP.j2'
-    dest: '{{ tivoli_cfgdir }}/{{ item }}-{{ ansible_hostname }}'
-    mode: 0644
-    owner: root
-    group: root
-    force: yes
-  with_items:
-    - dsm.inclexcl
-    - dsm.opt
-  notify: restart dsmcad
-  tags:
-  - tivoliba
-
-- name: copy tivoli opt  file
-  template:
-    src: '{{ item }}-TEMP.j2'
     dest: '{{ tivoli_cfgdir }}/{{ item }}'
     mode: 0644
     owner: root
     group: root
     force: yes
   with_items:
+    - dsm.inclexcl
     - dsm.opt
   notify: restart dsmcad
   tags:
@@ -137,8 +123,8 @@
 
 - name: link tivoli cfg files
   file:
-    src: '{{ tivoli_cfgdir }}/{{ item }}-{{ ansible_hostname }}'
-    dest: '{{ adsm_cfgdir }}/{{ item }}-{{ ansible_hostname }}'
+    src: '{{ tivoli_cfgdir }}/{{ item }}'
+    dest: '{{ adsm_cfgdir }}/{{ item }}'
     state: link
   with_items:
     - dsm.inclexcl
@@ -151,7 +137,7 @@
   template:
     src: dsmcad.service.j2
     dest: /etc/systemd/system/dsmcad.service
-    mode: 0755
+    mode: 0644
     owner: root
     group: root
   tags:
@@ -165,3 +151,12 @@
     daemon_reload: yes
   tags:
   - tivoliba
+
+- name: delete rpm temp dir
+  file:
+    path: '{{ rpmdir }}'
+    state: absent
+  tags:
+  - tivoliba
+
+

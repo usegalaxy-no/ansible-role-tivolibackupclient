@@ -1,6 +1,6 @@
-DEFaultserver    sym6-{{ ansible_hostname }}
+DEFaultserver    sym6
 
-SErvername  sym6-{{ ansible_hostname }}
+SErvername  sym6
    NODENAME           {{ backupclient_name }}
    COMMmethod         TCPip
    TCPPort            1500
@@ -14,7 +14,7 @@ SErvername  sym6-{{ ansible_hostname }}
    TCPBuffsize             48
    LARGECOMmbuffers        Yes
    Passwordaccess     generate
-   Inclexcl           /opt/tivoli/tsm/client/ba/bin/dsm.inclexcl-{{ ansible_hostname }}
+   Inclexcl           /opt/tivoli/tsm/client/ba/bin/dsm.inclexcl
    Domain             {{ backupdirs }}
    Managedservices    schedule webclient
    VirtualMountPoint  /etc
