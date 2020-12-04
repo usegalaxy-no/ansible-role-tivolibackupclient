@@ -2,7 +2,6 @@
 # tasks for tivoli backup client
 #
 
-
 - name: create rpm temp dir
   file:
     path: '{{ rpmdir }}'
@@ -12,9 +11,11 @@
   - tivoliba
 
 - name: copy rpms tivoli backup client
-  synchronize:
-    src: ../files/rpms/*.rpm
+  copy:
+    src: '{{ item }}'
     dest: '{{ rpmdir }}'
+  with_fileglob:
+    - rpms/*.rpm
   tags:
   - tivoliba
 
@@ -27,13 +28,8 @@
   - tivoliba
 
 - name: install tivoli rpms
-  yum:
-    name: "{{ item.path }}"
-    state: present
+  command: rpm -i --force --nodeps --nosignature  "{{ item.path }}"
   with_items: "{{ rpm_result.files }}"
-  retries: 5
-  register: result
-  until: result.rc == 0
   tags:
   - tivoliba
 
@@ -53,8 +49,6 @@
   tags:
   - tivoliba
 
-
-
 - name: copy tivoli config
   template:
     src: dsm.sys.j2
@@ -66,21 +60,66 @@
   notify: restart dsmcad
   tags:
   - tivoliba
+  ignore_errors: yes
 
 - name: copy tivoli include exclude files
-  copy:
-    src: '{{ item }}'
+  template:
+    src: '{{ item }}-TEMP.j2'
     dest: '{{ tivoli_cfgdir }}/{{ item }}'
     mode: 0644
     owner: root
     group: root
     force: yes
   with_items:
-    - dsm.inclexcl-etc
-    - dsm.opt-etc
+    - dsm.inclexcl
+    - dsm.opt
   notify: restart dsmcad
   tags:
   - tivoliba
+
+
+- name: check for /usr/local/bin
+  stat:
+    path: '/usr/local/bin'
+  register: bin_dir
+
+- name: "echo if bin directory already existed"
+  when: bin_dir.stat.exists
+  debug:
+    msg: "/usr/local/bin directory exists"
+
+- name: create /usr/local/bin if not exist
+  when: bin_dir.stat.exists == false
+  file:
+    path: '/usr/local/bin'
+    state: directory
+    mode: '0755'
+  tags:
+  - tivoliba
+
+
+- name: copy tivoli bin scripts
+  template:
+    src: 'dsmc-TEMP.j2'
+    dest: '/usr/local/bin/dsmc-{{ ansible_hostname }}'
+    mode: 0755
+    owner: root
+    group: root
+    force: yes
+  tags:
+  - tivoliba
+
+- name: copy tivoli pass file
+  copy:
+    src: 'TSM.PWD.{{ ansible_hostname }}'
+    dest: '{{ adsm_cfgdir }}/TSM.PWD'
+    mode: 0600
+    owner: root
+    group: root
+    force: no
+  tags:
+  - tivoliba
+  ignore_errors: yes
 
 - name: link tivoli cfg files
   file:
@@ -88,23 +127,19 @@
     dest: '{{ adsm_cfgdir }}/{{ item }}'
     state: link
   with_items:
-    - dsm.inclexcl-etc
-    - dsm.opt-etc
+    - dsm.inclexcl
+    - dsm.opt
   tags:
   - tivoliba
+  ignore_errors: yes
 
 - name: copy systemd file
   template:
     src: dsmcad.service.j2
     dest: /etc/systemd/system/dsmcad.service
-    mode: 0755
+    mode: 0644
     owner: root
     group: root
-  tags:
-  - tivoliba
-
-- name: add to systemctl
-  command: /usr/bin/systemctl daemon-reload
   tags:
   - tivoliba
 
@@ -113,5 +148,15 @@
     name: dsmcad
     state: started
     enabled: true
+    daemon_reload: yes
   tags:
   - tivoliba
+
+- name: delete rpm temp dir
+  file:
+    path: '{{ rpmdir }}'
+    state: absent
+  tags:
+  - tivoliba
+
+
