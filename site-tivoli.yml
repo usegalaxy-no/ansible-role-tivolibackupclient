@@ -3,7 +3,7 @@
 - hosts:
     - tbatest
   vars:
-    backupdirs: "/etc /var/spoo/cron"
+    backupdirs: "/etc /var/spool/cron"
     backupclient_name: DBUSEGALAXYNO
     backupserver_ip: 129.177.30.195
   become: true
