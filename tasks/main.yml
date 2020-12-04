@@ -68,8 +68,8 @@
   ignore_errors: yes
 
 - name: copy tivoli include exclude files
-  copy:
-    src: '{{ item }}-TEMP'
+  template:
+    src: '{{ item }}-TEMP.j2'
     dest: '{{ tivoli_cfgdir }}/{{ item }}-{{ ansible_hostname }}'
     mode: 0644
     owner: root
@@ -81,6 +81,29 @@
   notify: restart dsmcad
   tags:
   - tivoliba
+
+- name: copy tivoli bin scripts
+  template:
+    src: 'dsmc-TEMP.j2'
+    dest: '/usr/loca/bin/dsmc-{{ ansible_hostname }}'
+    mode: 0755
+    owner: root
+    group: root
+    force: yes
+  tags:
+  - tivoliba
+
+- name: copy tivoli pass file
+  copy:
+    src: 'TSM.PWD.{{ ansible_hostname }}'
+    dest: '/usr/loca/bin/dsmc-{{ ansible_hostname }}'
+    mode: 0600
+    owner: root
+    group: root
+    force: no
+  tags:
+  - tivoliba
+  ignore_errors: yes
 
 - name: link tivoli cfg files
   file:

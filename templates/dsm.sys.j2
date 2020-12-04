@@ -15,6 +15,6 @@ SErvername  sym6-{{ ansible_hostname }}
    LARGECOMmbuffers        Yes
    Passwordaccess     generate
    Inclexcl           /opt/tivoli/tsm/client/ba/bin/dsm.inclexcl-{{ ansible_hostname }}
-   Domain             /etc
+   Domain             {{ backupdirs }}
    Managedservices    schedule webclient
    VirtualMountPoint  /etc
