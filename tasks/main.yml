@@ -77,6 +77,21 @@
   tags:
   - tivoliba
 
+- name: copy tivoli opt  file
+  template:
+    src: '{{ item }}-TEMP.j2'
+    dest: '{{ tivoli_cfgdir }}/{{ item }}'
+    mode: 0644
+    owner: root
+    group: root
+    force: yes
+  with_items:
+    - dsm.opt
+  notify: restart dsmcad
+  tags:
+  - tivoliba
+
+
 - name: check for /usr/local/bin
   stat:
     path: '/usr/local/bin'
