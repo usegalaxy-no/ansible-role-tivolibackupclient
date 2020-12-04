@@ -69,27 +69,27 @@
 
 - name: copy tivoli include exclude files
   copy:
-    src: '{{ item }}'
-    dest: '{{ tivoli_cfgdir }}/{{ item }}'
+    src: '{{ item }}-TEMP'
+    dest: '{{ tivoli_cfgdir }}/{{ item }}-{{ ansible_hostname }}'
     mode: 0644
     owner: root
     group: root
     force: yes
   with_items:
-    - dsm.inclexcl-etc
-    - dsm.opt-etc
+    - dsm.inclexcl
+    - dsm.opt
   notify: restart dsmcad
   tags:
   - tivoliba
 
 - name: link tivoli cfg files
   file:
-    src: '{{ tivoli_cfgdir }}/{{ item }}'
-    dest: '{{ adsm_cfgdir }}/{{ item }}'
+    src: '{{ tivoli_cfgdir }}/{{ item }}-{{ ansible_hostname }}'
+    dest: '{{ adsm_cfgdir }}/{{ item }}-{{ ansible_hostname }}'
     state: link
   with_items:
-    - dsm.inclexcl-etc
-    - dsm.opt-etc
+    - dsm.inclexcl
+    - dsm.opt
   tags:
   - tivoliba
   ignore_errors: yes

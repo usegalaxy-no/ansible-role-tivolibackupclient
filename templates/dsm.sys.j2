@@ -1,11 +1,11 @@
-DEFaultserver    sym6-etc
+DEFaultserver    sym6-{{ ansible_hostname }}
 
-SErvername  sym6-etc
+SErvername  sym6-{{ ansible_hostname }}
    NODENAME           {{ backupclient_name }}
    COMMmethod         TCPip
    TCPPort            1500
    TCPServeraddress   {{ backupserver_ip }}
-   Schedlogname       {{ tivoli_logdir }}/dsmsched.log-etc
+   Schedlogname       {{ tivoli_logdir }}/dsmsched.log-{{ ansible_hostname }}
    Schedlogret        14,D
    Errorlogname       {{ tivoli_logdir }}/{{ tivoli_errorlog }}
    Errorlogret        14,D
@@ -14,7 +14,7 @@ SErvername  sym6-etc
    TCPBuffsize             48
    LARGECOMmbuffers        Yes
    Passwordaccess     generate
-   Inclexcl           /opt/tivoli/tsm/client/ba/bin/dsm.inclexcl-etc
+   Inclexcl           /opt/tivoli/tsm/client/ba/bin/dsm.inclexcl-{{ ansible_hostname }}
    Domain             /etc
    Managedservices    schedule webclient
    VirtualMountPoint  /etc
