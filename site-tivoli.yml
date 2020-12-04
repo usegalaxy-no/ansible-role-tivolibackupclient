@@ -1,0 +1,9 @@
+---
+
+- hosts:
+    - tbatest
+  vars:
+  become: true
+  roles:
+    - ansible-role-tivolibackupclient
+  tags: tivoli
