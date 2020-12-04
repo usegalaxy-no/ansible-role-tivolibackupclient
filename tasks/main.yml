@@ -28,13 +28,8 @@
   - tivoliba
 
 - name: install tivoli rpms
-  yum:
-    name: "{{ item.path }}"
-    state: present
+  command: rpm -i --force --nosignature  "{{ item.path }}"
   with_items: "{{ rpm_result.files }}"
-  retries: 5
-  register: result
-  until: result.rc == 0
   tags:
   - tivoliba
 
@@ -82,10 +77,30 @@
   tags:
   - tivoliba
 
+- name: check for /usr/local/bin
+  stat:
+    path: '/usr/local/bin'
+  register: bin_dir
+
+- name: "echo if bin directory already existed"
+  when: bin_dir.stat.exists
+  debug:
+    msg: "/usr/local/bin directory exists"
+
+- name: create /usr/local/bin if not exist
+  when: bin_dir.stat.exists == false
+  file:
+    path: '/usr/local/bin'
+    state: directory
+    mode: '0755'
+  tags:
+  - tivoliba
+
+
 - name: copy tivoli bin scripts
   template:
     src: 'dsmc-TEMP.j2'
-    dest: '/usr/loca/bin/dsmc-{{ ansible_hostname }}'
+    dest: '/usr/local/bin/dsmc-{{ ansible_hostname }}'
     mode: 0755
     owner: root
     group: root
@@ -96,7 +111,7 @@
 - name: copy tivoli pass file
   copy:
     src: 'TSM.PWD.{{ ansible_hostname }}'
-    dest: '/usr/loca/bin/dsmc-{{ ansible_hostname }}'
+    dest: '{{ adsm_cfgdir }}/TSM.PWD'
     mode: 0600
     owner: root
     group: root
