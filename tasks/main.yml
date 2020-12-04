@@ -2,7 +2,6 @@
 # tasks for tivoli backup client
 #
 
-
 - name: create rpm temp dir
   file:
     path: '{{ rpmdir }}'
@@ -12,9 +11,11 @@
   - tivoliba
 
 - name: copy rpms tivoli backup client
-  synchronize:
-    src: ../files/rpms/*.rpm
+  copy:
+    src: '{{ item }}'
     dest: '{{ rpmdir }}'
+  with_fileglob:
+    - rpms/*.rpm
   tags:
   - tivoliba
 
@@ -53,8 +54,6 @@
   tags:
   - tivoliba
 
-
-
 - name: copy tivoli config
   template:
     src: dsm.sys.j2
@@ -66,6 +65,7 @@
   notify: restart dsmcad
   tags:
   - tivoliba
+  ignore_errors: yes
 
 - name: copy tivoli include exclude files
   copy:
@@ -92,6 +92,7 @@
     - dsm.opt-etc
   tags:
   - tivoliba
+  ignore_errors: yes
 
 - name: copy systemd file
   template:
