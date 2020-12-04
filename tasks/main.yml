@@ -103,15 +103,11 @@
   tags:
   - tivoliba
 
-- name: add to systemctl
-  command: /usr/bin/systemctl daemon-reload
-  tags:
-  - tivoliba
-
 - name: start and enable dsmcad
   service:
     name: dsmcad
     state: started
     enabled: true
+    daemon_reload: yes
   tags:
   - tivoliba
