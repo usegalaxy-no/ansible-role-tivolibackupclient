@@ -10,9 +10,9 @@ SErvername  sym6
    Errorlogname       {{ tivoli_logdir }}/{{ tivoli_errorlog }}
    Errorlogret        14,D
    TXNBytelimit       524288
-   TCPNodelay              Yes
-   TCPBuffsize             48
-   LARGECOMmbuffers        Yes
+*   TCPNodelay              Yes
+*   TCPBuffsize             48
+*   LARGECOMmbuffers        Yes
    Passwordaccess     generate
    Inclexcl           /opt/tivoli/tsm/client/ba/bin/dsm.inclexcl
    Domain             {{ backupdirs }}

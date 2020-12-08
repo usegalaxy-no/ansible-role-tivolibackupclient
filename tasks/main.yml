@@ -60,7 +60,6 @@
   notify: restart dsmcad
   tags:
   - tivoliba
-  ignore_errors: yes
 
 - name: copy tivoli include exclude files
   template:
@@ -77,6 +76,25 @@
   tags:
   - tivoliba
 
+- name: add backupdirs to include file
+  lineinfile:
+    dest: '{{ tivoli_cfgdir }}/dsm.inclexcl'
+    line: 'include {{ item }}'
+  with_items:
+    - "{{ backupdirs.split(' ') }}"
+  notify: restart dsmcad
+  tags:
+  - tivoliba
+
+- name: add virtual mountpoints
+  lineinfile:
+    dest: '{{ tivoli_cfgdir }}/dsm.sys'
+    line: 'virtualmountpoint {{ item }}'
+  with_items:
+    - "{{ backupdirs.split(' ') }}"
+  notify: restart dsmcad
+  tags:
+  - tivoliba
 
 - name: check for /usr/local/bin
   stat:
