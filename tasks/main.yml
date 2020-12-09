@@ -107,7 +107,7 @@
     msg: "/usr/local/bin directory exists"
 
 - name: create /usr/local/bin if not exist
-  when: bin_dir.stat.exists == false
+  when: not bin_dir.stat.exists
   file:
     path: '/usr/local/bin'
     state: directory
