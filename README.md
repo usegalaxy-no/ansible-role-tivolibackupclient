@@ -37,7 +37,7 @@ Example Playbook
         backupserver_ip: 129.177.30.195
       become: true
       roles:
-        - tivoliba
+        - DBUSEGALAXYNO
       tags: tivoli
 
 
