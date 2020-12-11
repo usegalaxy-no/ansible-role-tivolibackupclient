@@ -33,11 +33,11 @@ Example Playbook
         - db.usegalaxy.no
       vars:
         backupdirs: "/etc /var/spool/cron"
-        backupclient_name: apo.ii
+        backupclient_name: DBUSEGALAXYNO
         backupserver_ip: 129.177.30.195
       become: true
       roles:
-        - DBUSEGALAXYNO
+        - ansible-role-tivolibackupclient
       tags: tivoli
 
 
