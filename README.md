@@ -29,16 +29,16 @@ Dependencies
 Example Playbook
 ----------------
 
-- hosts:
-    - db.usegalaxy.no
-  vars:
-    backupdirs: "/etc /var/spool/cron"
-    backupclient_name: apo.ii
-    backupserver_ip: 129.177.30.195
-  become: true
-  roles:
-    - tivoliba
-  tags: tivoli
+    - hosts:
+        - db.usegalaxy.no
+      vars:
+        backupdirs: "/etc /var/spool/cron"
+        backupclient_name: apo.ii
+        backupserver_ip: 129.177.30.195
+      become: true
+      roles:
+        - tivoliba
+      tags: tivoli
 
 
 License
