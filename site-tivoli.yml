@@ -1,9 +1,9 @@
 ---
 
 - hosts:
-    - tbatest
+    - db.usegalaxy.no
   vars:
-    backupdirs: "/etc /var/spool/cron"
+    backupdirs: "/etc /var/spool/cron /srv/postgresbackup"
     backupclient_name: DBUSEGALAXYNO
     backupserver_ip: 129.177.30.195
   become: true
