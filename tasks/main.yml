@@ -177,4 +177,14 @@
   tags:
   - tivoliba
 
+- name: copy logrotate file
+  template:
+    src: logrotate-tivoli.j2
+    dest: /etc/logrotate.d/tivoli
+    mode: 0644
+    owner: root
+    group: root
+  tags:
+  - tivoliba
+
 
